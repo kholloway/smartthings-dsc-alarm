@@ -21,9 +21,9 @@ Requirements:
 
 4. On your Smartphone or in the WebUI create a new Device call it "Alarm Panel", assign it to your location and your hub then click the dropdown menu for the devicetypes at the bottom and pick the "DSC Panel" device you created earlier (it will be at the very bottom of the deviceTypes list).
 
-5. Now the hard part, we need to follow the Smartthings REST API guide to authorize this "DSC Integration" SmartApp to allow control of our new device the "Alarm Panel". The guide can be found at this link: [Smartthings REST API Tutorial](http://build.smartthings.com/blog/tutorial-creating-a-custom-rest-smartapp-endpoint/). It's best to do this via a web browser and just save the resulting access_code.
-
----- Add more detail here about exact steps to authorized and get access_code -----
+5. Now the hard part, we need to authorize this Smarttthings app to be used via the REST API.
+   It's going to take a few steps but all you need is a web browser and your OAuth ID's from the app setup page.
+   Follow the RESTAPISetup.md document in this same repo to finish the setup.
 
 6. Edit 'alarmserver.cfg' and add in the OAuth/Access Code information, adjust your zones/partitions and callback event codes as needed. Leaving them at the defaults is likely what you already want.
 
