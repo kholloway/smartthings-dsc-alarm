@@ -1,17 +1,31 @@
-/**
+/*
  *  DSC Alarm Panel integration via REST API callbacks
  *
  *  Author: Kent Holloway <drizit@gmail.com>
  */
 
 preferences {
-  section("Alarm Panel") {
+  def events = ['alarm','closed','open','closed','partitionready','partitionnotready','partitionarmed','partitionalarm','partitionexitdelay','partitionentrydelay']
+  section("Alarm Panel:") {
     input "panel", "device.dSCPanel", title: "Choose Alarm Panel?", multiple: false, required: true
-    }
+  }
+  section("Activate Switches?) {
+    input "lights", "capability.switch", title: "Which lights/switches", multiple: true, required: false
+  }
+  section("Activate alarm?) {
+    input "alarms", "capability.alarm", title: "Which Alarm(s)", multiple: true, required: false
+  }
+  section("Notifications (optional)") {
+    input "sendPush", "enum", title: "Push Notifiation", required: false, metadata: [values: ["Yes","No"]]
+    input "phone1", "phone", title: "Phone Number", required: false
+  }
+  section("Notification events:") {
+    input "notifyEvents", "enum", title: "Which Events?", description: "default (all)", required: false, multiple: true, options: events
+  }
 }
 
 mappings {
-  path("/panel/:code/:zoneorpart") {
+  path("/panel/:eventcode/:zoneorpart") {
     action: [
       GET: "updateZoneOrPartition"
     ]
@@ -36,57 +50,30 @@ void updateZoneOrPartition() {
 private update(panel) {
     // log.debug "update, request: params: ${params} panel: ${panel.name}"
 
+    // Add more events here as needed
+    // Each event maps to a command in your "Alarm Panel" device type
+    def eventMap = [
+      '601':'alarm',
+      '602':'closed',
+      '609':'open',
+      '610':'closed',
+      '650':'partitionready',
+      '651':'partitionnotready',
+      '652':'partitionarmed',
+      '654':'partitionalarm',
+      '656':'partitionexitdelay',
+      '657':'partitionentrydelay'
+    ]
     def zoneorpartition = params.zoneorpart
-    def code = params.code
-  if (code) 
+    def eventCode = params.eventcode
+    if (eventCode)
     {
-      // log.debug "Panel:   ${panel.name}"
-      // log.debug "Zone/Partition:    ${zoneorpartition}"
-      // log.debug "Command: ${code}"
-      
-      // Codes come in as raw alarm codes from AlarmServer
-      // convert them to our device Panel commands
-      // OR send in a specific command which will be passed
-      // to the device
-      def newCommand = ""
-      switch(code) {
-         case "601": 
-           newCommand = "alarm"
-           break
-         case "602": 
-           newCommand = "closed"
-           break
-         case "609": 
-           newCommand = "open"
-           break
-         case "610":
-           newCommand = "closed"
-           break
-         case "650":
-           newCommand = "partitionready"
-           break
-         case "651":
-           newCommand = "partitionnotready"
-           break
-         case "652":
-           newCommand = "partitionarmed"
-           break
-         case "654":
-           newCommand = "partitionalarm"
-           break
-         case "656":
-           newCommand = "partitionexitdelay"
-           break
-         case "657":
-           newCommand = "partitionentrydelay"
-           break
-         default:
-           newCommand = command
-           break
+      // Lookup our eventCode in our eventMap
+      def command = eventMap."${eventCode}"
+      if (command)
+      {
+        // We have a valid command, lets send it to the device
+        panel."$command"(zoneorpartition)
       }
-      // log.debug "New Command: $newCommand"
-      // Send the resulting command
-      panel."$newCommand"(zoneorpartition)
     }
 }
-
