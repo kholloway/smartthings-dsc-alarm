@@ -33,11 +33,25 @@ SAVE THAT ACCESS CODE!
 
 You need that everytime you want to send a command to your new Smartthings App!
 
-Ok now one final test to make sure everything is working, lets test your app with the URL below. You need to replace $oauth_client_id with your the same OAuth Client ID we have been using from your app. Replace $access_token with the token you saved above. The number 609 below corresponds to "Zone Open" in the Envisalink API and then we are telling the app that it's an open event for "zone1". You can change those 2 values as needed and watch your panel devices open and close.
+Last step!
+
+You now need to get your apps ID so you can reference it directly, go to the URL below and if prompted login with your Smartthings developer id you have been using.
+
+List all your installed apps:
+
+    https://graph.api.smartthings.com/api/smartapps/installations/
+
+Search for a 'label' field matching your application name and copy down the 'id' field right above it.
+(It helps if you have a JSON formatted plugin in your web browser but it's just as easy to grab if you don't)
+
+Ok now one final test to make sure everything is working, lets test your app with the URL below. You need to replace $appID with the 'id' field you just grabbed above.
+Replace $access_token with the token you saved above.
+The number 609 below corresponds to "Zone Open" in the Envisalink API and then we are telling the app that it's an open event for "zone1".
+You can change those 2 values as needed and watch your panel devices open and close.
 
 Test URL:
 
-    https://graph.api.smartthings.com/api/smartapps/installations/$oauth_client_id/panel/609/zone1?access_token=$access_token
+    https://graph.api.smartthings.com/api/smartapps/installations/$appID/panel/609/zone1?access_token=$access_token
 
 
 
