@@ -13,7 +13,7 @@ Requirements:
 
 **Note:** Smartthings support is only available in the smartthings branch and not currently in the master branch. Switch to that branch to use it.
 
-1. Setup a Smartthings developer account at [Smartthings Developers](https://graph.api.smartthings.com)
+Step 1: **Setup a Smartthings developer account at [Smartthings Developers](https://graph.api.smartthings.com)**
 
 #### NEW Option!
 
@@ -36,20 +36,21 @@ You will be able to add this to the dashboard.
 Once you make the device names, go into the SmartApp settings and add the Zone Devices to the Zone Device List.
 You'll need to refresh the data somehow for it to work on the dashboard (restart your alarmserver script, for example)
 
+##### The rest of the setup
 
-3. Create a new Smartthings App in the IDE, call it 'DSC Integration' or whatever you like.
+1. Create a new Smartthings App in the IDE, call it 'DSC Integration' or whatever you like.
    Click "Enable OAuth in Smart App" and copy down the generated "OAuth Client ID" and the "OAuth Client Secret", you will need them later to generate an access code.
    Click "Create" and when the code section comes up select all the text and replace it with the code from the file 'dscAlarmIntegrationSmarththingsApp.groovy'.
    Click "Save" then "Publish" -> "For Me".
 
-4. On your Smartphone or in the WebUI create a new Device call it "Alarm Panel", assign it to your location and your hub then click the dropdown menu for the devicetypes at the bottom and pick the "DSC Panel" device you created earlier (it will be at the very bottom of the deviceTypes list).
+2. On your Smartphone or in the WebUI create a new Device call it "Alarm Panel", assign it to your location and your hub then click the dropdown menu for the devicetypes at the bottom and pick the "DSC Panel" device you created earlier (it will be at the very bottom of the deviceTypes list).
 
-5. Now the hard part, we need to authorize this Smarttthings app to be used via the REST API.
+3. Now the hard part, we need to authorize this Smarttthings app to be used via the REST API.
    It's going to take a few steps but all you need is a web browser and your OAuth ID's from the app setup page.
    Follow the RESTAPISetup.md document in this same repo to finish the setup.
 
-6. Edit 'alarmserver.cfg' and add in the OAuth/Access Code information, adjust your zones/partitions and callback event codes as needed.
+4. Edit 'alarmserver.cfg' and add in the OAuth/Access Code information, adjust your zones/partitions and callback event codes as needed.
    Leaving them at the defaults is likely what you already want.
 
-7. Fire up the AlarmServer, you should see your events from the server show up within 1-2 seconds on your Smartphone.
+5. Fire up the AlarmServer, you should see your events from the server show up within 1-2 seconds on your Smartphone.
 
