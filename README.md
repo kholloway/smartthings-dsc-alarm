@@ -27,5 +27,7 @@ Requirements:
 
 6. Edit 'alarmserver.cfg' and add in the OAuth/Access Code information, adjust your zones/partitions and callback event codes as needed. Leaving them at the defaults is likely what you already want.
 
+7. Create a "Zone Device" for each Zone you want to display individually.  The network id needs to be "zone#" (example: zone1).  You will be able to add this to the dashboard.  Once you make the device names, go into the SmartApp settings and add the Zone Devices to the Zone Device List.  You'll need to refresh the data somehow for it to work on the dashboard (restart your alarmserver script, for example)
+
 7. Fire up the AlarmServer, you should see your events from the server show up within 1-2 seconds on your Smartphone.
 
