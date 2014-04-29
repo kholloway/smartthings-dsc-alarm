@@ -2,12 +2,16 @@
  *  DSC Alarm Panel integration via REST API callbacks
  *
  *  Author: Kent Holloway <drizit@gmail.com>
+ *  Modified by: Matt Martz <matt.martz@gmail.com>
  */
 
 preferences {
 
   section("Alarm Panel:") {
-    input "panel", "device.polling", title: "Alarm Panel (required)", multiple: false, required: true
+    input "panel", "capability.polling", title: "Alarm Panel (required)", multiple: false, required: true
+  }
+  section("Zone Devices:") {
+    input "zonedevices", "capability.polling", title: "DSC Zone Devices", multiple: true, required: false
   }
   section("Control Switches:") {
     input "lights", "capability.switch", title: "Which lights/switches?", multiple: true, required: false
@@ -80,14 +84,34 @@ private update(panel) {
     {
       // Lookup our eventCode in our eventMap
       def opts = eventMap."${eventCode}"?.tokenize()
-      // log.debug "Options after lookup: ${opts}"
-      // log.debug "Zone or partition: $zoneorpartition"
+//      log.debug "Options after lookup: ${opts}"
+//      log.debug "Zone or partition: $zoneorpartition"
       if (opts[0])
       {
         // We have some stuff to send to the device now
         // this looks something like panel.zone("open", "1")
+//        log.debug "Test: ${opts[0]} and: ${opts[1]} for $zoneorpartition"
         panel."${opts[0]}"("${opts[1]}", "$zoneorpartition")
+        if ("${opts[0]}" == 'zone') {
+          //log.debug "It was a zone...  ${opts[1]}"
+            updateZoneDevices(zonedevices,"$zoneorpartition","${opts[1]}")
+        }
       }
+    }
+}
+
+private updateZoneDevices(zonedevices,zonenum,zonestatus) {
+    log.debug "zonedevices: $zonedevices - ${zonenum} is ${zonestatus}"
+//    log.debug "zonedevices.id are $zonedevices.id"
+//    log.debug "zonedevices.displayName are $zonedevices.displayName"
+//    log.debug "zonedevices.deviceNetworkId are $zonedevices.deviceNetworkId"
+  def zonedevice = zonedevices.find { it.deviceNetworkId == "${zonenum}" }
+    if (!zonedevice) {
+    
+    } else {
+      log.debug "Was True... Zone Device: $zonedevice.displayName at $zonedevice.deviceNetworkId is ${zonestatus}"
+        //Was True... Zone Device: Front Door Sensor at zone1 is closed
+        zonedevice.zone("${zonestatus}")
     }
 }
 
