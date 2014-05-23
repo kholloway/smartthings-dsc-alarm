@@ -118,14 +118,14 @@ def zone(String state, String zone) {
   // state will be a valid state for a zone (open, closed, alarm)
   // zone will be a number for the zone
   log.debug "Zone: ${state} for zone: ${zone}"
-  sendEvent (name: "zone${zone}", value: "${state}")
+  sendEvent (name: "${zone}", value: "${state}")
 }
 
 def partition(String state, String partition) {
   // state will be a valid state for the panel (ready, notready, armed, etc)
   // partition will be a partition number, for most users this will always be 1
   log.debug "Partition: ${state} for partition: ${partition}"
-  sendEvent (name: "partition${partition}", value: "${state}")
+  sendEvent (name: "${partition}", value: "${state}")
 }
 
 def poll() {
