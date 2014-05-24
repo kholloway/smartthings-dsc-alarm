@@ -29,7 +29,7 @@ metadata {
     standardTile("zone", "device.motion", width: 2, height: 2, canChangeBackground: true, canChangeIcon: true) {
       state("active",   label:'motion',    icon:"st.motion.motion.active",   backgroundColor:"#53a7c0")
       state("inactive", label:'no motion', icon:"st.motion.motion.inactive", backgroundColor:"#ffffff")
-      state("alarm",    label:'ALARM',     icon: "st.motion.motion.active",  backgroundColor: "#ff0000"
+      state("alarm",    label:'ALARM',     icon:"st.motion.motion.active",   backgroundColor:"#ff0000")
     }
 
     // This tile will be the tile that is displayed on the Hub page.
@@ -53,7 +53,7 @@ def zone(String state) {
    'closed':"inactive",
    'alarm':"alarm"
   ]
-  def newState = eventMap."${state}"?
+  def newState = eventMap."${state}"
   // Send final event
   sendEvent (name: "motion", value: "${newState}")
 }
