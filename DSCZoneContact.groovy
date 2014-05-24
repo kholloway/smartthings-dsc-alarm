@@ -23,7 +23,7 @@ metadata {
 
   tiles {
     // Main Row
-    standardTile("zone", "device.contact", width: 3, height: 3, canChangeBackground: true, canChangeIcon: true) {
+    standardTile("zone", "device.contact", width: 2, height: 2, canChangeBackground: true, canChangeIcon: true) {
       state "open",   label: '${name}', icon: "st.contact.contact.open",   backgroundColor: "#ffa81e"
       state "closed", label: '${name}', icon: "st.contact.contact.closed", backgroundColor: "#79b821"
       state "alarm",  label: '${name}', icon: "st.contact.contact.open",   backgroundColor: "#ff0000"
