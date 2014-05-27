@@ -101,18 +101,16 @@ private update(panel) {
 }
 
 private updateZoneDevices(zonedevices,zonenum,zonestatus) {
-    log.debug "zonedevices: $zonedevices - ${zonenum} is ${zonestatus}"
+  log.debug "zonedevices: $zonedevices - ${zonenum} is ${zonestatus}"
 //    log.debug "zonedevices.id are $zonedevices.id"
 //    log.debug "zonedevices.displayName are $zonedevices.displayName"
 //    log.debug "zonedevices.deviceNetworkId are $zonedevices.deviceNetworkId"
-  def zonedevice = zonedevices.find { it.deviceNetworkId == "${zonenum}" }
-    if (!zonedevice) {
-    
-    } else {
+  def zonedevice = zonedevices.find { it.deviceNetworkId == "zone${zonenum}" }
+  if (zonedevice) {
       log.debug "Was True... Zone Device: $zonedevice.displayName at $zonedevice.deviceNetworkId is ${zonestatus}"
-        //Was True... Zone Device: Front Door Sensor at zone1 is closed
-        zonedevice.zone("${zonestatus}")
-    }
+      //Was True... Zone Device: Front Door Sensor at zone1 is closed
+      zonedevice.zone("${zonestatus}")
+  }
 }
 
 private sendMessage(msg) {
