@@ -5,6 +5,8 @@
  *  Modified by: Matt Martz <matt.martz@gmail.com>
  */
 
+import groovy.json.JsonBuilder
+
 preferences {
 
   section("Alarm Panel:") {
@@ -18,6 +20,11 @@ preferences {
   }
   section("Activate Alarm Strobe:") {
     input "alarms", "capability.alarm", title: "Which Alarm(s)?", multiple: true, required: false
+  }
+  section("XBMC Notifications (optional):") {
+  	// TODO: put inputs here
+    input "xbmcserver", "text", title: "XBMC IP", description: "IP Address", required: false
+    input "xbmcport", "number", title: "XBMC Port", description: "Port", required: false
   }
   section("Notifications (optional):") {
     input "sendPush", "enum", title: "Push Notifiation", required: false,
@@ -110,7 +117,18 @@ private updateZoneDevices(zonedevices,zonenum,zonestatus) {
       log.debug "Was True... Zone Device: $zonedevice.displayName at $zonedevice.deviceNetworkId is ${zonestatus}"
       //Was True... Zone Device: Front Door Sensor at zone1 is closed
       zonedevice.zone("${zonestatus}")
-  }
+      if ("${settings.xbmcserver}" != "") {  //Note: I haven't tested this if statement, but it looks like it would work.
+        def lanaddress = "${settings.xbmcserver}:${settings.xbmcport}"
+        def deviceNetworkId = "1234"
+        def json = new JsonBuilder()
+        def messagetitle = "$zonedevice.displayName".replaceAll(' ','%20')
+        log.debug "$messagetitle"
+        json.call("jsonrpc":"2.0","method":"GUI.ShowNotification","params":[title: "$messagetitle",message: "${zonestatus}"],"id":1)
+        def xbmcmessage = "/jsonrpc?request="+json.toString()
+        def result = new physicalgraph.device.HubAction("""GET $xbmcmessage HTTP/1.1\r\nHOST: $lanaddress\r\n\r\n""", physicalgraph.device.Protocol.LAN, "${deviceNetworkId}")
+        sendHubCommand(result)
+      }
+    }
 }
 
 private sendMessage(msg) {
