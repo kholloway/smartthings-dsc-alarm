@@ -49,7 +49,7 @@ For example: **zone1** or **zone5**
 
 ### The rest of the setup
 
-1. Create a new Smartthings App in the IDE, call it 'DSC Integration' or whatever you like.
+1. Create a new Smartthings App in the IDE, call it 'DSC Integration' or whatever you like. Use the code from dscAlarmIntegrationSmarththingsApp.groovy file for the new smartapp.
 
 2. Click "Enable OAuth in Smart App" and copy down the generated "OAuth Client ID" and the "OAuth Client Secret", you will need them later to generate an access code.
    Click "Create" and when the code section comes up select all the text and replace it with the code from the file 'dscAlarmIntegrationSmarththingsApp.groovy'.
