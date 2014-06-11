@@ -10,23 +10,17 @@ import groovy.json.JsonBuilder
 preferences {
 
   section("Alarm Panel:") {
-    input "panel", "capability.polling", title: "Alarm Panel (required)", multiple: false, required: true
+    input "paneldevices", "capability.polling", title: "Alarm Panel (required)", multiple: false, required: true
   }
   section("Zone Devices:") {
-    input "zonedevices", "capability.polling", title: "DSC Zone Devices", multiple: true, required: false
-  }
-  section("Control Switches:") {
-    input "lights", "capability.switch", title: "Which lights/switches?", multiple: true, required: false
-  }
-  section("Activate Alarm Strobe:") {
-    input "alarms", "capability.alarm", title: "Which Alarm(s)?", multiple: true, required: false
+    input "zonedevices", "capability.polling", title: "DSC Zone Devices (required)", multiple: true, required: true
   }
   section("XBMC Notifications (optional):") {
   	// TODO: put inputs here
     input "xbmcserver", "text", title: "XBMC IP", description: "IP Address", required: false
     input "xbmcport", "number", title: "XBMC Port", description: "Port", required: false
   }
-  section("Notifications (optional):") {
+  section("Notifications (optional) - NOT WORKING:") {
     input "sendPush", "enum", title: "Push Notifiation", required: false,
       metadata: [
        values: ["Yes","No"]
@@ -53,21 +47,17 @@ mappings {
 
 def installed() {
   log.debug "Installed!"
-  subscribe(panel)
 }
 
 def updated() {
   log.debug "Updated!"
-  unsubscribe()
-  subscribe(panel)
 }
 
 void updateZoneOrPartition() {
-  update(panel)
+  update()
 }
 
-private update(panel) {
-    // log.debug "update, request: params: ${params} panel: ${panel.name}"
+private update() {
     def zoneorpartition = params.zoneorpart
 
     // Add more events here as needed
@@ -91,17 +81,20 @@ private update(panel) {
     {
       // Lookup our eventCode in our eventMap
       def opts = eventMap."${eventCode}"?.tokenize()
-//      log.debug "Options after lookup: ${opts}"
-//      log.debug "Zone or partition: $zoneorpartition"
+      // log.debug "Options after lookup: ${opts}"
+      // log.debug "Zone or partition: $zoneorpartition"
       if (opts[0])
       {
         // We have some stuff to send to the device now
         // this looks something like panel.zone("open", "1")
-//        log.debug "Test: ${opts[0]} and: ${opts[1]} for $zoneorpartition"
-        panel."${opts[0]}"("${opts[1]}", "$zoneorpartition")
+        // log.debug "Test: ${opts[0]} and: ${opts[1]} for $zoneorpartition"
         if ("${opts[0]}" == 'zone') {
-          //log.debug "It was a zone...  ${opts[1]}"
-            updateZoneDevices(zonedevices,"$zoneorpartition","${opts[1]}")
+           //log.debug "It was a zone...  ${opts[1]}"
+           updateZoneDevices(zonedevices,"$zoneorpartition","${opts[1]}")
+        }
+        if ("${opts[0]}" == 'partition') {
+           //log.debug "It was a zone...  ${opts[1]}"
+           updatePartitions(paneldevices, "$zoneorpartition","${opts[1]}")
         }
       }
     }
@@ -109,9 +102,9 @@ private update(panel) {
 
 private updateZoneDevices(zonedevices,zonenum,zonestatus) {
   log.debug "zonedevices: $zonedevices - ${zonenum} is ${zonestatus}"
-//    log.debug "zonedevices.id are $zonedevices.id"
-//    log.debug "zonedevices.displayName are $zonedevices.displayName"
-//    log.debug "zonedevices.deviceNetworkId are $zonedevices.deviceNetworkId"
+  // log.debug "zonedevices.id are $zonedevices.id"
+  // log.debug "zonedevices.displayName are $zonedevices.displayName"
+  // log.debug "zonedevices.deviceNetworkId are $zonedevices.deviceNetworkId"
   def zonedevice = zonedevices.find { it.deviceNetworkId == "zone${zonenum}" }
   if (zonedevice) {
       log.debug "Was True... Zone Device: $zonedevice.displayName at $zonedevice.deviceNetworkId is ${zonestatus}"
@@ -129,6 +122,16 @@ private updateZoneDevices(zonedevices,zonenum,zonestatus) {
         sendHubCommand(result)
       }
     }
+}
+
+private updatePartitions(paneldevices, partitionnum, partitionstatus) {
+  log.debug "paneldevices: $paneldevices - ${partitionnum} is ${partitionstatus}"
+  def paneldevice = paneldevices.find { it.deviceNetworkId == "partition${partitionnum}" }
+  if (paneldevice) {
+    log.debug "Was True... Panel device: $paneldevice.displayName at $paneldevice.deviceNetworkId is ${partitionstatus}"
+    //Was True... Zone Device: Front Door Sensor at zone1 is closed
+    paneldevice.partition("${partitionstatus}", "${partitionnum}")
+  }
 }
 
 private sendMessage(msg) {
