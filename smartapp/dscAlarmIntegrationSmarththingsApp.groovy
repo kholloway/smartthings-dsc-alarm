@@ -5,6 +5,17 @@
  *  Modified by: Matt Martz <matt.martz@gmail.com>
  */
 
+definition(
+    name: "DSC Integration",
+    namespace: "",
+    author: "Kent Holloway <drizit@gmail.com>",
+    description: "DSC Integration App",
+    category: "My Apps",
+    iconUrl: "https://dl.dropboxusercontent.com/u/2760581/dscpanel_small.png",
+    iconX2Url: "https://dl.dropboxusercontent.com/u/2760581/dscpanel_large.png",
+    oauth: true
+)
+
 import groovy.json.JsonBuilder
 
 preferences {
