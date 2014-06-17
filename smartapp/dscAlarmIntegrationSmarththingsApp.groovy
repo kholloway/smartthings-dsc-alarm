@@ -21,10 +21,10 @@ import groovy.json.JsonBuilder
 preferences {
 
   section("Alarm Panel:") {
-    input "paneldevices", "capability.polling", title: "Alarm Panel (required)", multiple: false, required: true
+    input "paneldevices", "capability.polling", title: "Alarm Panel (required)", multiple: false, required: false
   }
   section("Zone Devices:") {
-    input "zonedevices", "capability.polling", title: "DSC Zone Devices (required)", multiple: true, required: true
+    input "zonedevices", "capability.polling", title: "DSC Zone Devices (required)", multiple: true, required: false
   }
   section("XBMC Notifications (optional):") {
   	// TODO: put inputs here
@@ -39,7 +39,7 @@ preferences {
     input "phone1", "phone", title: "Phone Number", required: false
   }
   section("Notification events (optional):") {
-    input "notifyEvents", "enum", title: "Which Events?", description: "default (none)", required: false, multiple: true,
+    input "notifyEvents", "enum", title: "Which Events?", description: "default (none)", required: false, multiple: false,
      options:
       ['all','alarm','closed','open','closed','partitionready',
        'partitionnotready','partitionarmed','partitionalarm',
