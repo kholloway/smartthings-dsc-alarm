@@ -51,7 +51,7 @@ You can change those 2 values as needed and watch your panel devices open and cl
 
 Test URL:
 
-    https://graph.api.smartthings.com/api/smartapps/installations/$appID/panel/609/zone1?access_token=$access_token
+    https://graph.api.smartthings.com/api/smartapps/installations/$appID/panel/609/1?access_token=$access_token
 
 
 
