@@ -14,6 +14,30 @@ Requirements:
 
 **Note:** Smartthings support is only available in the smartthings branch and not currently in the master branch. Switch to that branch to use it.
 
+#### Install AlarmServer on your server/computer (Python 2.X required)
+
+Clone the AlarmServer repo:
+
+    git clone https://github.com/juggie/AlarmServer.git
+    cd AlarmServer
+
+Switch to the Smartthings Branch in the AlarmServer repo project:
+
+    git checkout smartthings
+
+Read the included README.md in the AlarmServer repo to finish setting it up, in particular you need to generate a SSL cert and copy the example config file to your new config file
+Install the required requests python module:
+
+    pip install requests
+
+Test run AlarmServer.py and make sure you don't get any errors:
+
+    ./alarmserver.py
+
+AlarmServer should work at this point and not complain about anything and you should be able to open a web browser up to your computer/server on HTTPS port 8111 and see the AlarmServer web page.
+If that all works then proceed on to the Smarttthings setup.
+
+
 #### Setup a Smartthings developer account at:
 
  [https://graph.api.smartthings.com](https://graph.api.smartthings.com)
