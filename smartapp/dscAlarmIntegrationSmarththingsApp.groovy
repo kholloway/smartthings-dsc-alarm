@@ -83,7 +83,9 @@ private update() {
       '652':"partition armed",
       '654':"partition alarm",
       '656':"partition exitdelay",
-      '657':"partition entrydelay"
+      '657':"partition entrydelay",
+      '701':"partition armed",
+      '702':"partition armed"
     ]
 
     // get our passed in eventcode
