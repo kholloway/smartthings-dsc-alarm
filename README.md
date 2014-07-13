@@ -16,7 +16,10 @@ Requirements:
 
 #### Install AlarmServer on your server/computer (Python 2.X required)
 
-Clone the AlarmServer repo:
+I'm currently supporting both DSC panels and Ademco Vista panels via the Envisalink TPI.
+Make sure you clone the correct AlarmServer project for your specific panel.
+
+#### For DSC Panels clone the AlarmServer repo:
 
     git clone https://github.com/juggie/AlarmServer.git
     cd AlarmServer
@@ -25,7 +28,17 @@ Switch to the Smartthings Branch in the AlarmServer repo project:
 
     git checkout smartthings
 
-Read the included README.md in the AlarmServer repo to finish setting it up, in particular you need to generate a SSL cert and copy the example config file to your new config file
+#### For Ademco/Vista panels clone the HoneyAlarmServer repo:
+
+    git clone https://github.com/MattTW/HoneyAlarmServer
+
+Look in the plugins-example directory for the Smartthings plugin and configure as needed.
+
+#### For all Panel types:
+
+Read the included README.md for the repo you cloned and follow it's setup directions.
+
+Both projects require at least one additional Python module as shown below.
 Install the required requests python module:
 
     pip install requests
