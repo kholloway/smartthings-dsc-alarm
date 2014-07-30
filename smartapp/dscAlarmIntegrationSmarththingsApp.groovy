@@ -78,6 +78,8 @@ private update() {
       '602':"zone closed",
       '609':"zone open",
       '610':"zone closed",
+      '631':"zone smoke",
+      '632':"zone clear",
       '650':"partition ready",
       '651':"partition notready",
       '652':"partition armed",
