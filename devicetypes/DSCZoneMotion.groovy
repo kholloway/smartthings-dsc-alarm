@@ -3,14 +3,17 @@
  *
  *  Author: Matt Martz <matt.martz@gmail.com>
  *  Date: 2014-04-28
+ *  Modified to be a motion device: Kent Holloway <drizit@gmail.com>
+ *  Date: 2014-05-24
  */
 
 // for the UI
 metadata {
-  definition (name: "DSC Zone", author: "matt.martz@gmail.com") {
+  definition (name: "DSC Zone Motion", author: "matt.martz@gmail.com") {
     // Change or define capabilities here as needed
     capability "Refresh"
-    capability "Contact Sensor"
+    capability "Motion Sensor"
+    capability "Sensor"
     capability "Polling"
 
     // Add commands as needed
@@ -23,10 +26,10 @@ metadata {
 
   tiles {
     // Main Row
-    standardTile("zone", "device.contact", width: 3, height: 3, canChangeBackground: true, canChangeIcon: true) {
-      state "open",   label: '${name}', icon: "st.contact.contact.open",   backgroundColor: "#ffa81e"
-      state "closed", label: '${name}', icon: "st.contact.contact.closed", backgroundColor: "#79b821"
-      state "alarm",  label: '${name}', icon: "st.contact.contact.open",   backgroundColor: "#ff0000"
+    standardTile("zone", "device.motion", width: 2, height: 2, canChangeBackground: true, canChangeIcon: true) {
+      state("active",   label:'motion',    icon:"st.motion.motion.active",   backgroundColor:"#53a7c0")
+      state("inactive", label:'no motion', icon:"st.motion.motion.inactive", backgroundColor:"#ffffff")
+      state("alarm",    label:'ALARM',     icon:"st.motion.motion.active",   backgroundColor:"#ff0000")
     }
 
     // This tile will be the tile that is displayed on the Hub page.
@@ -42,7 +45,17 @@ def zone(String state) {
   // state will be a valid state for a zone (open, closed)
   // zone will be a number for the zone
   log.debug "Zone: ${state}"
-  sendEvent (name: "contact", value: "${state}")
+
+  // Since this is a motion sensor device we need to convert open to active and closed to inactive
+  // before sending the event
+  def eventMap = [
+   'open':"active",
+   'closed':"inactive",
+   'alarm':"alarm"
+  ]
+  def newState = eventMap."${state}"
+  // Send final event
+  sendEvent (name: "motion", value: "${newState}")
 }
 
 def poll() {
